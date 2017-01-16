@@ -3,8 +3,6 @@
 ## Code Snippet
 
 ```Dart
-library test_sample_extension;
-
 import 'sample_asynchronous_extension.dart';
 
 void main() {
