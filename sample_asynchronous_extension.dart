@@ -7,7 +7,7 @@ import 'dart-ext:sample_extension';
 class BarcodeReader {
   static SendPort _port;
 
-  Future<String> readBarcode(String filename) {
+  Future<List> readBarcode(String filename) {
     var completer = new Completer();
     var replyPort = new RawReceivePort();
     var args = new List(2);
