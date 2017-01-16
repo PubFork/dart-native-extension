@@ -236,16 +236,21 @@ void wrappedBarcodeReader(Dart_Port dest_port_id,
 			char **pStart = values;
 			if (values != NULL) {
 				Dart_CObject* results[MAX_BARCODE_AMOUNT];
+				Dart_CObject collection[MAX_BARCODE_AMOUNT];
 				int index = 0;
 				char * pszValue = NULL;
 				while ((pszValue = *pStart) != NULL) {
-					Dart_CObject* value = new Dart_CObject();
-					value->type = Dart_CObject_kString;
-					value->value.as_string = pszValue;
-					results[index] = value;
+					Dart_CObject value;
+					value.type = Dart_CObject_kString;
+					value.value.as_string = pszValue;
+					collection[index] = value;
 
 					++pStart;
 					++index;
+				}
+
+				for (int i = 0; i < length; i++) {
+					results[i] = &(collection[i]);
 				}
 
 				Dart_CObject message;
@@ -254,6 +259,7 @@ void wrappedBarcodeReader(Dart_Port dest_port_id,
 				message.value.as_array.values = results;
 				Dart_PostCObject(reply_port_id, &message);
 				freeString(values);
+
 				return;
 			}
 		}
