@@ -1,6 +1,8 @@
 # Dart Native Extension with Dynamsoft Barcode Reader
+Create a Dart asynchronous extension with [Dynamsoft C/C++ barcode SDK][2].
 
 ## Code Snippet
+A simple dart barcode reader:
 
 ```Dart
 import 'sample_asynchronous_extension.dart';
@@ -18,7 +20,10 @@ void main() {
 
 ```
 
+![dart barcode reader](http://www.codepool.biz/wp-content/uploads/2017/01/dart-console-barcode-reader.PNG)
+
 ## Reference
 [Native Extensions for the Standalone Dart VM][1]
 
 [1]:https://www.dartlang.org/articles/dart-vm/native-extensions
+[2]:http://www.dynamsoft.com/Products/dynamsoft-webcam-sdk.aspx
