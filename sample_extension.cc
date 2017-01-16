@@ -10,6 +10,8 @@
 #include "If_DBRP.h"
 #pragma comment(lib, "DBRx64.lib")
 
+#define MAX_BARCODE_AMOUNT 64
+
 struct barcode_format
 {
 	const char * pszFormat;
@@ -138,7 +140,7 @@ char **readBarcode(char *pszFileName, int *out_len) {
 	__int64 llFormat = (OneD | QR_CODE | PDF417 | DATAMATRIX);
 
 	char pszBuffer[512] = { 0 };
-	int iMaxCount = 0x7FFFFFFF;
+	int iMaxCount = MAX_BARCODE_AMOUNT;
 	int iIndex = 0;
 	ReaderOptions ro = { 0 };
 	int iRet = -1;
@@ -204,6 +206,17 @@ char **readBarcode(char *pszFileName, int *out_len) {
 	return values;
 }
 
+void freeString(char** values) {
+	char * pszValue = NULL;
+	char **pStart = values;
+	while ((pszValue = *pStart) != NULL) {
+		free(pszValue);
+		pStart += 1;
+	}
+
+	free(values);
+}
+
 void wrappedBarcodeReader(Dart_Port dest_port_id,
 	Dart_CObject* message) {
 	Dart_Port reply_port_id = ILLEGAL_PORT;
@@ -220,18 +233,18 @@ void wrappedBarcodeReader(Dart_Port dest_port_id,
 
 			int length = 0;
 			char **values = readBarcode(pszFileName, &length);
-
+			char **pStart = values;
 			if (values != NULL) {
-				Dart_CObject* results[64];
+				Dart_CObject* results[MAX_BARCODE_AMOUNT];
 				int index = 0;
 				char * pszValue = NULL;
-				while ((pszValue = *values) != NULL) {
+				while ((pszValue = *pStart) != NULL) {
 					Dart_CObject* value = new Dart_CObject();
 					value->type = Dart_CObject_kString;
 					value->value.as_string = pszValue;
 					results[index] = value;
 
-					++values;
+					++pStart;
 					++index;
 				}
 
@@ -240,7 +253,7 @@ void wrappedBarcodeReader(Dart_Port dest_port_id,
 				message.value.as_array.length = length;
 				message.value.as_array.values = results;
 				Dart_PostCObject(reply_port_id, &message);
-
+				freeString(values);
 				return;
 			}
 		}
