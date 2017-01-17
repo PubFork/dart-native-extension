@@ -25,5 +25,9 @@ void main() {
 ## Reference
 [Native Extensions for the Standalone Dart VM][1]
 
+## Blog
+[Building Dart Native Extension with Dynamsoft Barcode SDK on Windows][3]
+
 [1]:https://www.dartlang.org/articles/dart-vm/native-extensions
 [2]:http://www.dynamsoft.com/Products/dynamsoft-webcam-sdk.aspx
+[3]:http://www.codepool.biz/dart-native-extension-barcode-sdk.html
